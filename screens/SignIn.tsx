@@ -84,42 +84,37 @@ export default function SignIn() {
       })}>
         {({ values, handleChange, errors, setFieldTouched, touched, isValid, handleSubmit,}) =>(
           <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} keyboardVerticalOffset={90} style={{ width: "100%", flex: 1 }} >
-            <View style={{ justifyContent: "center", alignItems: "center", flex: 1, backgroundColor: colors.white, }} >
-              <Text style={{ color: colors.foreground, fontSize: 24, marginBottom: 20, }}>
+            <View style={styles.view_style} >
+              <Text style={{ fontSize: 24, marginBottom: 20, }}>
                 Welcome to My First Chat App
               </Text>
-              <Image source={require("../assets/welcome-img.png")} style={{ width: 180, height: 180 }} resizeMode="cover" />
+              <Image source={require("../assets/welcome-img.png")} style={styles.image_size} resizeMode="cover" />
               <View style={{ marginTop: 20 }}>
-                <PhoneInput ref={phoneInput} placeholder="Phone No" defaultCode="US" layout="first" value={formatPhoneNumber(values.phoneNo)}
+                <PhoneInput 
+                  ref={phoneInput} 
+                  placeholder="Phone No" 
+                  defaultCode="US" 
+                  layout="first" 
+                  onChangeText={handleChange("phoneNo")} 
+                  value={formatPhoneNumber(values.phoneNo)}
                   withDarkTheme
-                  withShadow
+                  withShadow 
                 />
-                {errors.phoneNo && (
+                { errors.phoneNo && (
                   <View style={{}}>
                     <Text style={{ fontSize: 12, color: "#FF0D10" }}>
                       {errors.phoneNo}
                     </Text>
                   </View>
                 )}
-                <View
-                  style={{
-                    borderWidth: 1,
-                    marginTop: 20,
-                    borderColor: "white",
-                    shadowOpacity: 0.2,
-                    backgroundColor: "#f7f5f5",
-                  }}
-                >
+                <View style={styles.view_container} >
                   <TextInput
                     placeholder="Password"
                     value={values.password}
                     secureTextEntry={true}
                     onChangeText={handleChange("password")}
                     onBlur={() => setFieldTouched("password")}
-                    style={{
-                      width: 200,
-                      margin: 15,
-                    }}
+                    style={{ width: 200, margin: 15}}
                     textContentType="password"
                   />
                 </View>
@@ -157,3 +152,22 @@ export default function SignIn() {
     </Formik>
   );
 }
+
+const styles = StyleSheet.create({
+  view_style: {
+    justifyContent: "center", 
+    alignItems: "center", 
+    flex: 1, 
+    backgroundColor: "white"
+  }, 
+  image_size: {
+    width: 180, 
+    height: 180
+  }, 
+  view_container: {
+    marginTop: 20,
+    borderColor: "white",
+    shadowOpacity: 0.2,
+    backgroundColor: "#f7f5f5",
+  }
+});
