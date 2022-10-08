@@ -3,36 +3,30 @@ import { Alert, View, Text, Image, TextInput, Button, Platform, KeyboardAvoiding
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import RadioForm from "react-native-simple-radio-button";
-import Colors from "../constants/Colors";
 import { Formik } from "formik";
-import { ROUTES } from "../utility/Routes";
 import * as yup from "yup";
-import { formatPhoneNumber, phoneRegExp } from "../utility/utility";
 import PhoneInput from "react-native-phone-number-input";
+
+import { formatPhoneNumber, phoneRegExp } from "../utility/utility";
+import Colors from "../constants/Colors";
+import { ROUTES } from "../utility/Routes";
 import { CredentialsContext } from "../context/CredentialsContext";
-// import CameraScreen from "./CameraScreen";
-import { isBase64 } from "../utility/utility";
-import * as ImagePicker from "expo-image-picker";
+import { post } from '../api/auth';
 
 export default function SignUp() {
-  const [openCamera, setOpenCamera] = useState(false);
-  const [profileImage, setProfileImage] = useState("");
-
-  const [isModalVisible, setModalVisible] = useState(false);
 
   const navigation = useNavigation();
 
   const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
 
   const phoneInput = useRef<PhoneInput>(null);
-  const [formattedValue, setFormattedValue] = useState("");
 
   const [chosenOption, setChosenOption] = useState("researcher"); //will store our current user options
   const options = [
     { label: "Researcher", value: "researcher" },
     { label: "Teacher", value: "teacher" },
   ]; //create our options for radio group
-
+  
   const colors = {
     tealGreen: "#128c7e",
     tealGreenDark: "#075e54",
@@ -49,65 +43,42 @@ export default function SignUp() {
   async function handlePress(values) {
     console.log(values);
     // Note that this values come from state variables that we've declared before
-    const usernameValue = values.phoneNo;
-    const passwordValue = values.password;
-    var attrs = {
-      phonenumber: values.phoneNo,
-      confirmPassword: values.confirmPassword,
+    var param = {
+      username: values.username,
+      phoneNo: values.phoneNo,
       type: chosenOption,
-      profile_pic: profileImage
+      password: values.password
     };
-    // Since the signUp method returns a Promise, we need to call it using await
-    // return await Parse.User.signUp(usernameValue, passwordValue, attrs).then((createdUser) => {
-    //     Alert.alert(
-    //       "Success!",
-    //       `User ${createdUser.get("username")} was successfully created!`
-    //     );
-    //     setStoredCredentials(createdUser);
-    //     // navigation.navigate("ChatList", { isAuhenticated: true });
-    //     return true;
-    // }).catch((error) => {
-    //   Alert.alert("Error!", error.message);
-    //   return false;
-    // });
-  }
 
-  const handleAutoFocus = (setFieldTouched) => {
-    setFieldTouched("phoneNo");
-    return "";
-  };
+    const res = await post(param, "users/signup");
+    console.log(res);
+    if(res.status) {
+      Alert.alert(
+        "Success!",
+        `User ${param.username} was successfully created!`
+      );
+      setStoredCredentials(res.user);
+      // navigation.navigate("ChatList", { isAuhenticated: true });
 
-  const sendImage = (imageUrl) => {
-    console.log("Image URL HERE>>>>>>>", imageUrl);
-    setProfileImage(imageUrl.base64);
-    setOpenCamera(false);
-    setModalVisible(false);
-  };
-
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [8, 8],
-      quality: 1,
-      base64: true,
-    });
-
-    console.log("SELECTED IMAGE HERE>>>>>>", result.base64);
-
-    if (!result.cancelled) {
-      setModalVisible(false);
-      setProfileImage("data:image/jpg;base64," + result.base64);
-      // props.submitSelectedImage("data:image/jpg;base64," + result.base64);
+    } else {
+      Alert.alert(
+        "Error!",
+        res.msg
+      );
     }
-  };
+    
+  }
 
   return (
     <Formik
-      initialValues={{ phoneNo: "", password: "", confirmPassword: "" }}
+      initialValues={{ username: "", phoneNo: "", password: "", confirmPassword: "" }}
       onSubmit={(values) => handlePress(values)}
       validationSchema={yup.object().shape({
+        username: yup
+          .string()
+          .min(4, "Username should be larger than 4 characters.")
+          .max(30, "Username should not exceed 30 characters.")
+          .required("Username is a required field."),
         phoneNo: yup
           .string()
           .min(10, "Phone number is not valid")
@@ -115,7 +86,7 @@ export default function SignUp() {
           .matches(phoneRegExp, "Phone number is not valid"),
         password: yup
           .string()
-          .min(4)
+          .min(4, "Password should be larger than 4 characters. ")
           .max(10, "Password should not excced 10 chars.")
           .required("Password is a required field."),
         confirmPassword: yup
@@ -135,13 +106,19 @@ export default function SignUp() {
               <Text style={{ fontSize: 24, marginBottom: 20,}} >
                 Register Your Account
               </Text>
-              {/* <View>
-                <TouchableOpacity
-                  style={styles.touchable}
-                  onPress={() => setModalVisible(!isModalVisible)}>
-                </TouchableOpacity>
-              </View> */}
               <View style={{ marginTop: 20 }}>
+                <View style={styles.view_style}>
+                  <TextInput
+                    placeholder="Username" value={values.username} 
+                    onChangeText={handleChange("username")} 
+                    onBlur={() => setFieldTouched("username")}
+                    style={{ width: 200, margin: 15 }} textContentType="Username"
+                  />
+                </View>
+                { touched.username && errors.username && (
+                  <Text style={styles.error_style}> {errors.username} </Text>
+                )
+                }
                 <PhoneInput
                   ref={phoneInput}
                   placeholder="Phone No"
@@ -153,30 +130,16 @@ export default function SignUp() {
                   withShadow
                 />
                 {errors.phoneNo && (
-                  <View style={{}}>
-                    <Text style={{ fontSize: 12, color: "#FF0D10" }}>
-                      {errors.phoneNo}
-                    </Text>
-                  </View>
+                  <Text style={styles.error_style}> {errors.phoneNo} </Text>
                 )}
                 <View style={styles.view_style}>
-                  <TextInput
-                    placeholder="Password"
-                    value={values.password}
-                    secureTextEntry={true}
-                    onChangeText={handleChange("password")}
-                    onBlur={() => setFieldTouched("password")}
-                    style={{
-                      width: 200,
-                      margin: 15,
-                    }}
-                    textContentType="newPassword"
+                  <TextInput placeholder="Password" value={values.password}
+                    secureTextEntry={true} onChangeText={handleChange("password")} onBlur={() => setFieldTouched("password")}
+                    style={{ width: 200, margin: 15 }} textContentType="newPassword"
                   />
                 </View>
                 {touched.password && errors.password && (
-                  <Text style={{ fontSize: 12, color: "#FF0D10" }}>
-                    {errors.password}
-                  </Text>
+                  <Text style={styles.error_style}> {errors.password} </Text>
                 )}
                 <View style={styles.view_style}>
                   <TextInput
@@ -190,9 +153,7 @@ export default function SignUp() {
                   />
                 </View>
                 {touched.confirmPassword && errors.confirmPassword && (
-                  <Text style={{ fontSize: 12, color: "#FF0D10" }}>
-                    {errors.confirmPassword}
-                  </Text>
+                  <Text style={styles.error_style}> {errors.confirmPassword} </Text>
                 )}
                 <View style={{ marginTop: 15, alignContent: "center" }}>
                   <RadioForm
@@ -219,13 +180,14 @@ export default function SignUp() {
                     <Text style={{ color: colors.secondaryText }}>
                       Already a Registered User?
                     </Text>
-                    <Text style={{ color: Colors.light.tint, marginLeft: 5, fontSize: 15 }} onPress={() => navigation.navigate(ROUTES.SIGN_IN, { isAuhenticated: false }) }>
+                    <Text style={styles.text_style} onPress={() => navigation.navigate(ROUTES.SIGN_IN, { isAuhenticated: false }) }>
                       Sign In{" "}
                     </Text>
                   </View>
                 </View>
               </View>
             </View>
+
           </KeyboardAvoidingView>
         );
         }
@@ -259,7 +221,16 @@ const styles = StyleSheet.create({
   },
   radio_style: {
     fontSize: 12, 
-    color: Colors.light.tint
+    color: Colors.light.tint,
+  }, 
+  text_style: {
+    alignSelf: "center",
+    color: Colors.light.tint,
+    fontSize: 16,
+  }, 
+  error_style: {
+    fontSize: 12, 
+    color: "#FF0D10"
   }
   
 })

@@ -86,7 +86,7 @@ export default function SignIn() {
           <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} keyboardVerticalOffset={90} style={{ width: "100%", flex: 1 }} >
             <View style={styles.view_style} >
               <Text style={{ fontSize: 24, marginBottom: 20, }}>
-                Welcome to My First Chat App
+                Welcome to Chat App
               </Text>
               <Image source={require("../assets/welcome-img.png")} style={styles.image_size} resizeMode="cover" />
               <View style={{ marginTop: 20 }}>
