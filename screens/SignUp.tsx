@@ -58,7 +58,7 @@ export default function SignUp() {
         `User ${param.username} was successfully created!`
       );
       setStoredCredentials(res.user);
-      // navigation.navigate("ChatList", { isAuhenticated: true });
+      navigation.navigate(ROUTES.MAIN_PAGE, { isAuhenticated: true });
 
     } else {
       Alert.alert(

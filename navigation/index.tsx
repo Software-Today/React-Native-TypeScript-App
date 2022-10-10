@@ -7,22 +7,36 @@ import { FontAwesome } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import * as React from 'react';
+import React, { useContext, useState } from "react";
 
 import { ColorSchemeName, Pressable } from 'react-native';
 
 import { ROUTES } from '../utility/Routes';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
+import { CredentialsContext } from "../context/CredentialsContext";
+import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
+import LinkingConfiguration from './LinkingConfiguration';
+
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import SignIn from '../screens/SignIn';
 import SignUp from '../screens/SignUp';
-import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
-import LinkingConfiguration from './LinkingConfiguration';
+import Main from '../screens/MainScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: "light" }) {
-  
+  const [appReady, setAppReady] = React.useState(false);
+  const [storedCredentials, setStoredCredentials] = React.useState("");
+  const [currentUser, setCurrentUser] = React.useState(null);
+
+  const checkCreds = async () => {
+    // const User = await Parse.User.currentAsync();
+    // console.log("User Object " + typeof currentUser);
+    // setCurrentUser(User);
+    // setStoredCredentials(User);
+    // console.log("Here is the current Object " + typeof currentUser);
+  };
+
   return (
     <NavigationContainer
       linking={LinkingConfiguration} 
@@ -36,14 +50,17 @@ export default function Navigation({ colorScheme }: { colorScheme: "light" }) {
  * A root stack navigator is often used for displaying modals on top of all other content.
  * https://reactnavigation.org/docs/modal
  */
+
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-  const [currentUser, setCurrentUser] = React.useState(null);
+
   return (
     <Stack.Navigator>
       <Stack.Screen name={ROUTES.SIGN_IN} component={SignIn} />
       <Stack.Screen name={ROUTES.SIGN_UP} component={SignUp} />
+      <Stack.Screen name={ROUTES.MAIN_PAGE} component={Main} />
       
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
