@@ -12,6 +12,7 @@ import { formatPhoneNumber, phoneRegExp } from "../utility/utility";
 import { CredentialsContext } from "../context/CredentialsContext";
 import { ROUTES } from "../utility/Routes";
 import Colors from "../constants/Colors";
+import { post } from '../api/auth';
 
 
 export default function SignIn() {
@@ -33,39 +34,28 @@ export default function SignIn() {
   };
 
   async function handlePress(values) {
-
-    // Logout if any existing user exists
-    // await Parse.User.logOut().then(async () => {
-    //   const currentUser = await Parse.User.currentAsync();
-    //   if (currentUser === null) {
-    //     setStoredCredentials();
-    //   }
-    // }).catch((error) => {
-    //   Alert.alert("Error!", error.message);
-    // });
-
     // Clear Cache
-    // setStoredCredentials();
-    // Parse.User._clearCache();
+    setStoredCredentials();
 
-    console.log(values);
-    const usernameValue = values.phoneNo;
-    const passwordValue = values.password;
-    // return await Parse.User.logIn(usernameValue, passwordValue).then(async (loggedInUser) => {
-    //   Alert.alert(
-    //     "Success!",
-    //     `User ${loggedInUser.get("username")} has successfully signed in!`
-    //   );
-    //   const currentUser = await Parse.User.currentAsync();
-    //   console.log(loggedInUser === currentUser);
-    //   setStoredCredentials(loggedInUser);
-    //   navigation.navigate("ChatList", { screen: "Chats" });
-    //   return true;
-    // }).catch((error) => {
-    //   Alert.alert("Error!", error.message);
-    //   return false;
-    // });
+    var param = {
+      phoneNo: values.phoneNo,
+      password: values.password
+    }
+    const res = await post(param, "users/signin");
+    if(res.status) {
+      Alert.alert(
+        "Success!",
+        "Login Success!"
+      );
+      setStoredCredentials(res.user);
+      navigation.navigate(ROUTES.HOME, { isAuhenticated: true });
 
+    } else {
+      Alert.alert(
+        "Error!",
+        res.msg
+      );
+    }
   }
 
   return (

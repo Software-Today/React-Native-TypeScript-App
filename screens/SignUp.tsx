@@ -41,7 +41,6 @@ export default function SignUp() {
   };
 
   async function handlePress(values) {
-    console.log(values);
     // Note that this values come from state variables that we've declared before
     var param = {
       username: values.username,
@@ -58,7 +57,7 @@ export default function SignUp() {
         `User ${param.username} was successfully created!`
       );
       setStoredCredentials(res.user);
-      navigation.navigate(ROUTES.MAIN_PAGE, { isAuhenticated: true });
+      navigation.navigate(ROUTES.HOME, { isAuhenticated: true });
 
     } else {
       Alert.alert(
