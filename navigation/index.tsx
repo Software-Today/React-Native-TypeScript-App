@@ -11,6 +11,8 @@ import React, { useContext, useState, useEffect } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { MaterialCommunityIcons, Entypo, AntDesign } from "@expo/vector-icons";
 import { ColorSchemeName, Pressable, View, Alert, StyleSheet, Text, Button } from "react-native";
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';  
+import Icon from 'react-native-vector-icons/Ionicons';  
 
 import { ROUTES } from '../utility/Routes';
 import Colors from '../constants/Colors';
@@ -24,9 +26,11 @@ import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import SignIn from '../screens/SignIn';
 import SignUp from '../screens/SignUp';
-import Main from '../screens/MainScreen';
-import Profile from '../screens/Profile';
-import Setting from '../screens/Setting';
+import MainScreen from '../screens/MainScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import SettingScreen from '../screens/SettingScreen';
+import WeatherScreen from '../screens/WeatherScreen';
+
 import { post } from '../api/auth';
 
 export default function Navigation({ colorScheme }: { colorScheme: "light" }) {
@@ -111,12 +115,6 @@ export default function Navigation({ colorScheme }: { colorScheme: "light" }) {
   );
 }
 
-/**
- * A root stack navigator is often used for displaying modals on top of all other content.
- * https://reactnavigation.org/docs/modal
- */
-
-
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator(props) {
@@ -139,10 +137,14 @@ function RootNavigator(props) {
           headerShown: false}}>
           {storedCredentials ? (
             <>
-              <Stack.Screen name={ROUTES.HOME} component={Main} options={{ headerTitleAlign: "center" }} />
-              <Stack.Screen name={ROUTES.PROFILE} component={Profile} options={{ headerTitleAlign: "center" }} />
-              <Stack.Screen name={ROUTES.SETTING} component={Setting} options={{ headerTitleAlign: "center" }} />
-            </>
+              {/* {() => (
+                <BottomTabNavigator/>
+              )} */}
+              <Stack.Screen name={ROUTES.HOME} component={MainScreen} options={{ headerTitleAlign: "center" }} />
+              <Stack.Screen name={ROUTES.PROFILE} component={ProfileScreen} options={{ headerTitleAlign: "center" }} />
+              <Stack.Screen name={ROUTES.SETTING} component={SettingScreen} options={{ headerTitleAlign: "center" }} /> 
+              <Stack.Screen name={ROUTES.WEATHER} component={WeatherScreen} options={{ headerTitleAlign: "center" }} /> 
+              </>
           ) : (
             <>
               <Stack.Screen name={ROUTES.SIGN_IN} component={SignIn} options={{ headerTitleAlign: "center" }} />
@@ -159,17 +161,64 @@ function RootNavigator(props) {
   );
 }
 
-/**
- * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
- * https://reactnavigation.org/docs/bottom-tab-navigator
- */
+const BottomTab = createBottomTabNavigator<RootTabParamList>();
+
+function BottomTabNavigator() {
+  const colorScheme = useColorScheme();
+  return (
+    <BottomTab.Navigator
+      initialRouteName="Main"
+      screenOptions={{
+        tabBarActiveTintColor: Colors[colorScheme].tint,
+        headerStyle: { backgroundColor: Colors.light.tint },
+        headerTintColor: Colors.light.background,
+        headerTitleAlign: "left",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+      }}
+    >
+      <BottomTab.Screen
+        name="Main"
+        component={MainScreen}
+        options={{
+          title: "Main",
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Weather"
+        component={WeatherScreen}
+        options={{
+          title: "Weather",
+          tabBarIcon: ({ color }) => <TabBarIcon name="cloud" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Setting"
+        component={SettingScreen}
+        options={{
+          title: "Setting",
+          tabBarIcon: ({ color }) => <TabBarIcon name="cog" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+        }}
+      />
+  </BottomTab.Navigator>
+  );
+}
+
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
-
-
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
+  name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
 }) {
   return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;

@@ -106,18 +106,6 @@ export default function SignUp() {
                 Register Your Account
               </Text>
               <View style={{ marginTop: 20 }}>
-                <View style={styles.view_style}>
-                  <TextInput
-                    placeholder="Username" value={values.username} 
-                    onChangeText={handleChange("username")} 
-                    onBlur={() => setFieldTouched("username")}
-                    style={{ width: 200, margin: 15 }} textContentType="Username"
-                  />
-                </View>
-                { touched.username && errors.username && (
-                  <Text style={styles.error_style}> {errors.username} </Text>
-                )
-                }
                 <PhoneInput
                   ref={phoneInput}
                   placeholder="Phone No"
@@ -131,6 +119,18 @@ export default function SignUp() {
                 {errors.phoneNo && (
                   <Text style={styles.error_style}> {errors.phoneNo} </Text>
                 )}
+                <View style={styles.view_style}>
+                  <TextInput
+                    placeholder="Username" value={values.username} 
+                    onChangeText={handleChange("username")} 
+                    onBlur={() => setFieldTouched("username")}
+                    style={{ width: 200, margin: 15 }} textContentType="Username"
+                  />
+                </View>
+                { touched.username && errors.username && (
+                  <Text style={styles.error_style}> {errors.username} </Text>
+                )
+                }
                 <View style={styles.view_style}>
                   <TextInput placeholder="Password" value={values.password}
                     secureTextEntry={true} onChangeText={handleChange("password")} onBlur={() => setFieldTouched("password")}

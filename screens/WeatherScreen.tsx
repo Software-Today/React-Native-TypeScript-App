@@ -1,15 +1,14 @@
 import { StyleSheet, StatusBar } from 'react-native';
-import React from "react";
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
 import BottomTab from '../components/BottomTab';
 
-export default function MainScreen({ navigation }: RootStackScreenProps<'Main'>) {
+export default function WeatherScreen({ navigation }: RootStackScreenProps<'Weather'>) {
   return (
-    <>  
+    <>
       <View style={styles.container}>
-        <Text style={styles.title}>Main Page.</Text>
+        <Text style={styles.title}>Weather</Text>
       </View>
       <BottomTab navigation={navigation}/>
     </>
@@ -36,7 +35,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2e78b7',
   },
-  wrapper: {  
-    flex: 1,  
-  }
 });

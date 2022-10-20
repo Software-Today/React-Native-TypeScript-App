@@ -43,10 +43,10 @@ export default function SignIn() {
     }
     const res = await post(param, "users/signin");
     if(res.status) {
-      Alert.alert(
-        "Success!",
-        "Login Success!"
-      );
+      // Alert.alert(
+      //   "Success!",
+      //   "Login Success!"
+      // );
       setStoredCredentials(res.user);
       navigation.navigate(ROUTES.HOME, { isAuhenticated: true });
 
@@ -76,9 +76,8 @@ export default function SignIn() {
           <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} keyboardVerticalOffset={90} style={{ width: "100%", flex: 1 }} >
             <View style={styles.view_style} >
               <Text style={{ fontSize: 24, marginBottom: 20, }}>
-                Welcome to Chat App
+                Welcome to Expo App
               </Text>
-              <Image source={require("../assets/welcome-img.png")} style={styles.image_size} resizeMode="cover" />
               <View style={{ marginTop: 20 }}>
                 <PhoneInput 
                   ref={phoneInput} 

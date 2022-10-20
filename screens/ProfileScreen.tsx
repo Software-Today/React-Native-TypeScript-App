@@ -5,7 +5,7 @@ import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
 import { ROUTES } from '../utility/Routes';
 
-export default function Profile({ navigation }: RootStackScreenProps<'Profile'>) {
+export default function ProfileScreen({ navigation }: RootStackScreenProps<'Profile'>) {
   return (
     <>
       <View style={{flex:1}} >  
@@ -27,15 +27,6 @@ export default function Profile({ navigation }: RootStackScreenProps<'Profile'>)
   );
 }
 
-Profile.navigationOptions={  
-    tabBarIcon:({tintColor, focused})=>(  
-        <Icon  
-            name={focused ? 'ios-person' : 'md-person'}  
-            color={tintColor}  
-            size={25}  
-        />  
-    )  
-} 
 
 const styles = StyleSheet.create({
   container: {
