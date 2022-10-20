@@ -1,32 +1,19 @@
-import Icon from 'react-native-vector-icons/Ionicons';  
-import { StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
+import { StyleSheet, StatusBar } from 'react-native';
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
-import { ROUTES } from '../utility/Routes';
+import BottomTab from '../components/BottomTab';
 
-export default function ProfileScreen({ navigation }: RootStackScreenProps<'Profile'>) {
+export default function ProfileScreen({ navigation }: RootStackScreenProps<'Weather'>) {
   return (
     <>
-      <View style={{flex:1}} >  
-        <StatusBar backgroundColor='red' barStyle='light-content' />  
-        <View style={styles.header}>  
-            <Icon 
-              name='ios-home' size={28} color='white'
-              onPress={() => navigation.navigate(ROUTES.HOME, {isAuhenticated: true})}/>
-            <Icon 
-              name='ios-person' 
-              size={28} color='white' 
-              onPress={() => navigation.navigate(ROUTES.PROFILE, {isAuhenticated: true})}/>  
-        </View>  
-      </View>
       <View style={styles.container}>
-        <Text style={styles.title}>Profile Screen.</Text>
+        <Text style={styles.title}>Profile</Text>
       </View>
-  </>
+      <BottomTab navigation={navigation}/>
+    </>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -34,6 +21,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
+    backgroundColor: '#f2f2f2'
   },
   title: {
     fontSize: 20,
@@ -47,15 +35,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2e78b7',
   },
-  wrapper: {  
-    flex: 1,  
-  },  
-  header:{  
-      flexDirection: 'row',  
-      alignItems: 'center',  
-      justifyContent: 'space-between',  
-      backgroundColor: 'black',  
-      paddingHorizontal: 18,  
-      paddingTop: 30,  
-  } 
 });
