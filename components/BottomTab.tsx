@@ -2,20 +2,16 @@ import React, { useContext, useState, useEffect } from 'react';
 import {StyleSheet, Text, View,Button, StatusBar} from 'react-native'; 
 import Icon from 'react-native-vector-icons/Ionicons';  
 
-import Main from '../screens/MainScreen';
-import Profile from '../screens/ProfileScreen';
-import Setting from '../screens/SettingScreen';
 import { ROUTES } from '../utility/Routes';
 import { CredentialsContext } from "../context/CredentialsContext";
 import { RootStackScreenProps } from '../types';
 
-export default function BottomTab({navigation}) {  
-    const [currentUser, setCurrentUser] = React.useState(null);
+export default function BottomTab({navigation}) {
     const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
   
     async function logout() {
         setStoredCredentials(); 
-        navigation.navigate(ROUTES.HOME, {isAuhenticated: false}); 
+        navigation.navigate(ROUTES.MAIN, {isAuhenticated: false}); 
     }
     
     return (

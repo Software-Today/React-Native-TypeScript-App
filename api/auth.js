@@ -34,11 +34,15 @@ export const get_weather = async() => {
     const location = await axios.get(location_url);
     var latitude = location.data.latitude;
     var longitude = location.data.longitude;
-    const weather_url = Constant.WEATHER_API + latitude + '&lon=' + longitude + '&appid=' + Constant.WEATHER_KEY;
-    console.log(weather_url);
+    const weather_url = Constant.WEATHER_API + latitude + '&lon=' + longitude + '&appid=' + Constant.WEATHER_KEY + '&units=metric';
     const weather_data = await axios.get(weather_url);
-    console.log(weather_data.data);
-    return weather_data.data;
+    var current_data = weather_data.data; 
+    var data = {};
+    data.location = current_data.name;
+    var detail = { weather: current_data.weather, main: current_data.main, dt: current_data.dt }; 
+    data.detail = detail;
+    console.log(data);
+    return data;
   } catch(error) {
 
   }
