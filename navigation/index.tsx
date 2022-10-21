@@ -140,7 +140,7 @@ function RootNavigator(props) {
               {/* {() => (
                 <BottomTabNavigator/>
               )} */}
-              <Stack.Screen name={ROUTES.HOME} component={MainScreen} options={{ headerTitleAlign: "center" }} />
+              <Stack.Screen name={ROUTES.MAIN} component={MainScreen} options={{ headerTitleAlign: "center" }} />
               <Stack.Screen name={ROUTES.PROFILE} component={ProfileScreen} options={{ headerTitleAlign: "center" }} />
               <Stack.Screen name={ROUTES.SETTING} component={SettingScreen} options={{ headerTitleAlign: "center" }} /> 
               <Stack.Screen name={ROUTES.WEATHER} component={WeatherScreen} options={{ headerTitleAlign: "center" }} /> 

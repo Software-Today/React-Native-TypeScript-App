@@ -22,7 +22,7 @@ export default function BottomTab({navigation}) {
     <View style={styles.header}>
       <StatusBar backgroundColor='black' barStyle='light-content' />
 
-        <Icon name='ios-home' size={28} color='white' onPress={() => navigation.navigate(ROUTES.HOME, {isAuhenticated: true})}/>
+        <Icon name='ios-home' size={28} color='white' onPress={() => navigation.navigate(ROUTES.MAIN, {isAuhenticated: true})}/>
         <Icon name='ios-construct' size={28} color='white' onPress={() => navigation.navigate(ROUTES.SETTING, {isAuhenticated: true})}/>
         <Icon name='ios-person' size={28} color='white' onPress={() => navigation.navigate(ROUTES.PROFILE, {isAuhenticated: true})}/>
         <Icon name="ios-log-out" size={28} color='white' 

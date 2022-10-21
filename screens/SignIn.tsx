@@ -43,10 +43,6 @@ export default function SignIn() {
     }
     const res = await post(param, "users/signin");
     if(res.status) {
-      // Alert.alert(
-      //   "Success!",
-      //   "Login Success!"
-      // );
       setStoredCredentials(res.user);
       navigation.navigate(ROUTES.HOME, { isAuhenticated: true });
 
